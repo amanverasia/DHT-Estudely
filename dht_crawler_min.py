@@ -1,5 +1,5 @@
 # dht_crawler_min.py
-import socket, time, random, csv, sys
+import socket, time, random, csv, sys, os
 from typing import Deque, Tuple
 from collections import deque
 
@@ -46,9 +46,21 @@ def main():
         # Caches
         seen_infohashes: set[bytes] = set()
 
-        # CSV writer (stdout)
-        writer = csv.writer(sys.stdout)
-        writer.writerow(["infohash", "peer_ip", "peer_port"])
+        # CSV writers: stdout and file (append; create header if new file)
+        writer_stdout = csv.writer(sys.stdout)
+        out_path = "peers.csv"
+        file_exists = os.path.exists(out_path)
+        file_handle = open(out_path, "a", newline="")
+        writer_file = csv.writer(file_handle)
+
+        def write_row(row):
+            writer_stdout.writerow(row)
+            writer_file.writerow(row)
+
+        # Header
+        writer_stdout.writerow(["infohash", "peer_ip", "peer_port"])
+        if not file_exists:
+            writer_file.writerow(["infohash", "peer_ip", "peer_port"])
 
         t0 = time.time()
 
@@ -101,7 +113,7 @@ def main():
                         if vals:
                             peers = parse_compact_peers(vals)
                             for pip, pport in peers[:PER_INFOHASH_PEERS_LIMIT - peers_written]:
-                                writer.writerow([ih.hex(), pip, pport])
+                                write_row([ih.hex(), pip, pport])
                                 peers_written += 1
                                 if peers_written >= PER_INFOHASH_PEERS_LIMIT:
                                     break
@@ -142,6 +154,10 @@ def main():
         print(f"# collected {len(seen_infohashes)} infohashes", file=sys.stderr)
 
     finally:
+        try:
+            file_handle.close()
+        except Exception:
+            pass
         client.close()
 
 if __name__ == "__main__":
