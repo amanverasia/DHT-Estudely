@@ -9,6 +9,8 @@ This is your playground to understand how BitTorrent DHT and torrenting works.
 3. **Experiment** - Modify, break, learn
 4. **Read the docs** - Understand the theory
 
+If you want a step-by-step guided lab with prompts, start with `docs/WORKSHOP.md`.
+
 ---
 
 ## Start Here: Understanding the Stack
@@ -112,6 +114,8 @@ This ties everything together:
 ```
 Bootstrap → Find Nodes → Sample Infohashes → Get Peers → Fetch Metadata → Output
 ```
+
+The important design point is that the crawler should compose the reusable protocol modules rather than duplicate them.
 
 ---
 

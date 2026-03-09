@@ -44,12 +44,20 @@ docs/
   WORKSHOP.md               # Step-by-step guided lab for users
 
 examples/
+  01_bencode_demo.py      # Example: bencode basics
+  02_dht_bootstrap_demo.py # Example: bootstrap into the DHT
+  03_dht_get_peers_demo.py # Example: peer discovery concepts
+  04_peer_metadata_demo.py # Example: peer wire overview
   test_fetch_one.py         # Example: full metadata fetch flow
 ```
 
 ## Running
 
 ```bash
+# Guided lab
+python3 examples/01_bencode_demo.py
+python3 -m unittest test_offline_regressions.py
+
 # Main crawler - discover + fetch metadata
 python3 dht_collect_and_metadata.py
 
@@ -100,6 +108,7 @@ Recommended progression:
 4. `dht_collect_and_metadata.py`
    Teach: how the full pipeline composes the lower layers
    Show: bootstrap -> sample infohashes -> get peers -> fetch metadata
+   Emphasize: this file should orchestrate the canonical modules, not fork the protocol logic
 
 ## Guided Experience Rules
 

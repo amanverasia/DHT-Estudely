@@ -251,18 +251,18 @@ The crawler outputs CSV with columns:
 
 ## Configuration
 
-Edit constants in `dht_collect_and_metadata.py`:
+For one-off runs, prefer command-line flags:
+
+```bash
+python3 dht_collect_and_metadata.py --max-infohashes 25 --stdout-only
+```
+
+The module-level constants in `dht_collect_and_metadata.py` provide the defaults:
 
 ```python
 MAX_INFOHASHES = 999999   # How many to discover
 PEERS_PER_INFOHASH = 20   # Max peers per infohash
 METADATA_PEER_ATTEMPTS = 5 # How many peers to try
-```
-
-Or use command-line flags:
-
-```bash
-python3 dht_collect_and_metadata.py --max-infohashes 25 --stdout-only
 ```
 
 ---

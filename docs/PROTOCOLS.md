@@ -118,9 +118,10 @@ Once you have peer addresses from DHT, you connect via TCP to exchange data.
 3. Run `python3 examples/test_fetch_one.py` - Fetch real metadata
 
 ### Advanced
-1. Read `dht_collect_and_metadata.py` - Full crawler
-2. Understand BEP-51 sample_infohashes optimization
-3. Experiment with DHT crawling parameters
+1. Read `docs/WORKSHOP.md` - Follow the guided lab in order
+2. Read `dht_collect_and_metadata.py` - See how the full crawler orchestrates the lower-level modules
+3. Understand BEP-51 sample_infohashes optimization
+4. Experiment with DHT crawling parameters
 
 ---
 
