@@ -12,6 +12,11 @@ This connects to bootstrap nodes and shows:
 Run: python3 examples/02_dht_bootstrap_demo.py
 """
 import socket
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from dht_krpc import DHTClient, BOOTSTRAP, parse_compact_nodes
 
 def main():

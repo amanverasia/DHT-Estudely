@@ -10,6 +10,11 @@ Run: python3 examples/03_dht_get_peers_demo.py
 """
 import socket
 import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from dht_krpc import DHTClient, BOOTSTRAP, parse_compact_nodes, parse_compact_peers
 
 def find_node_near_target(client, target: bytes) -> tuple:

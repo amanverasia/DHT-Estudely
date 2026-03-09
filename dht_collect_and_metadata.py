@@ -232,18 +232,27 @@ class DHTClient:
             return None
         return None
 
+    def _await_response(self, addr: Tuple[str, int], tid: bytes, deadline: float) -> Optional[dict]:
+        while time.time() < deadline:
+            pkt = self._recv()
+            if not pkt:
+                continue
+            obj, src = pkt
+            if src != addr:
+                continue
+            if obj.get(b"t") != tid:
+                continue
+            if obj.get(b"y") == b"r":
+                return obj
+            if obj.get(b"y") == b"e":
+                return None
+        return None
+
     def _query(self, addr: Tuple[str,int], q: str, extra: Dict[bytes, Any]) -> Optional[dict]:
         try:
             t = self._send_query(addr, q, extra)
             deadline = time.time() + 2.0  # Reasonable timeout
-            
-            while time.time() < deadline:
-                pkt = self._recv()
-                if not pkt: 
-                    continue
-                obj, src = pkt
-                if obj.get(b"y") == b"r" and obj.get(b"t") == t:
-                    return obj
+            return self._await_response(addr, t, deadline)
         except Exception:
             pass
         return None

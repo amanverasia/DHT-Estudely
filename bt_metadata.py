@@ -221,21 +221,29 @@ def parse_metainfo(meta_blob: bytes) -> Dict[str, Any]:
     if not isinstance(obj, dict):
         raise ValueError("bad metainfo")
 
-    # metainfo structure: { 'announce'?, 'info': {...}, 'created by'?, ... }
-    info = obj.get(b"info", {})
-    name = info.get(b"name", b"").decode("utf-8", "ignore")
+    info = obj.get(b"info")
+    if isinstance(info, dict):
+        info_dict = info
+    else:
+        info_dict = obj
+
+    name = info_dict.get(b"name", b"").decode("utf-8", "ignore")
 
     files: List[Dict[str, Any]] = []
-    if b"files" in info:  # multi-file mode
-        for f in info[b"files"]:
-            length = f.get(b"length", 0)
-            path = b"/".join(p for p in f.get(b"path", []) if isinstance(p, (bytes, bytearray)))
-            files.append({"length": int(length), "path": path.decode("utf-8", "ignore")})
+    if b"files" in info_dict:  # multi-file mode
+        for f in info_dict[b"files"]:
+            if not isinstance(f, dict):
+                continue
+            length = int(f.get(b"length", 0))
+            path_parts = f.get(b"path", [])
+            if isinstance(path_parts, list):
+                path = b"/".join(p for p in path_parts if isinstance(p, (bytes, bytearray)))
+                files.append({"length": length, "path": path.decode("utf-8", "ignore")})
     else:
-        length = int(info.get(b"length", 0))
+        length = int(info_dict.get(b"length", 0))
         files.append({"length": length, "path": name})
 
-    piece_len = int(info.get(b"piece length", 0))
+    piece_len = int(info_dict.get(b"piece length", 0))
     return {
         "name": name,
         "files": files,

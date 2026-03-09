@@ -2,6 +2,10 @@
 import csv, time, random, sys
 from collections import defaultdict
 from typing import Dict, List, Tuple
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from bt_metadata import fetch_metadata, parse_metainfo
 
 PEERS_PER_INFOHASH_TO_TRY = 5

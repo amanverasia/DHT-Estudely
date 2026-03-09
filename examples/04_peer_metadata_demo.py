@@ -10,6 +10,11 @@ Learn how to connect to a BitTorrent peer and fetch metadata:
 Run: python3 examples/04_peer_metadata_demo.py
 """
 import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from bt_metadata import bt_handshake, ext_handshake, fetch_metadata, parse_metainfo
 
 def main():

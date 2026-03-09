@@ -2,7 +2,6 @@
 import os, random, socket, struct, time
 from typing import List, Tuple, Dict, Optional
 from dht_bencode import bencode, bdecode
-import struct
 
 def parse_compact_peers(values) -> list[tuple[str, int]]:
     """
@@ -99,45 +98,40 @@ class DHTClient:
             pass
         return None
 
-    # --- Queries we need ---
-
-    def ping(self, addr: Tuple[str, int]) -> Optional[dict]:
-        t = self._send_query(addr, "ping", {})
-        deadline = time.time() + 2.0
+    def _await_response(self, addr: Tuple[str, int], tid: bytes, deadline: float) -> Optional[dict]:
         while time.time() < deadline:
             pkt = self._recv()
             if not pkt:
                 continue
             obj, src = pkt
-            if obj.get(b"y") == b"r" and obj.get(b"t") == t:
+            if src != addr:
+                continue
+            if obj.get(b"t") != tid:
+                continue
+            if obj.get(b"y") == b"r":
                 return obj
+            if obj.get(b"y") == b"e":
+                return None
         return None
+
+    # --- Queries we need ---
+
+    def ping(self, addr: Tuple[str, int]) -> Optional[dict]:
+        t = self._send_query(addr, "ping", {})
+        deadline = time.time() + 2.0
+        return self._await_response(addr, t, deadline)
 
     def find_node(self, addr: Tuple[str, int], target: Optional[bytes] = None) -> Optional[dict]:
         if target is None:
             target = rand_node_id()
         t = self._send_query(addr, "find_node", {b"target": target})
         deadline = time.time() + 2.0
-        while time.time() < deadline:
-            pkt = self._recv()
-            if not pkt:
-                continue
-            obj, src = pkt
-            if obj.get(b"y") == b"r" and obj.get(b"t") == t:
-                return obj
-        return None
+        return self._await_response(addr, t, deadline)
     
     def get_peers(self, addr: tuple[str, int], infohash: bytes) -> dict | None:
         t = self._send_query(addr, "get_peers", {b"info_hash": infohash})
         deadline = time.time() + 2.0
-        while time.time() < deadline:
-            pkt = self._recv()
-            if not pkt:
-                continue
-            obj, src = pkt
-            if obj.get(b"y") == b"r" and obj.get(b"t") == t:
-                return obj
-        return None
+        return self._await_response(addr, t, deadline)
     
     def sample_infohashes(self, addr: tuple[str, int], target: bytes | None = None) -> dict | None:
         """
@@ -150,14 +144,7 @@ class DHTClient:
             target = rand_node_id()
         t = self._send_query(addr, "sample_infohashes", {b"target": target})
         deadline = time.time() + 2.0
-        while time.time() < deadline:
-            pkt = self._recv()
-            if not pkt:
-                continue
-            obj, src = pkt
-            if obj.get(b"y") == b"r" and obj.get(b"t") == t:
-                return obj
-        return None
+        return self._await_response(addr, t, deadline)
 
     def parse_samples(self, resp: dict) -> list[bytes]:
         r = resp.get(b"r", {})

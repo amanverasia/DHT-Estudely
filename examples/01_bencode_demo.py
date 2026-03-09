@@ -10,6 +10,11 @@ Bencode types:
   List:    l4:spami42ee -> ["spam", 42]
   Dict:    d3:foo3:bari42ee -> {"foo": 42}
 """
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from dht_bencode import bencode, bdecode
 
 print("=== Bencode Encoding ===")
@@ -28,7 +33,12 @@ print("\n=== Round-trip ===")
 original = {"name": "test.torrent", "piece length": 262144, "files": ["a.txt", "b.txt"]}
 encoded = bencode(original)
 decoded, _ = bdecode(encoded)
+expected = {
+    b"name": b"test.torrent",
+    b"piece length": 262144,
+    b"files": [b"a.txt", b"b.txt"],
+}
 print(f"Original: {original}")
 print(f"Encoded:  {encoded}")
 print(f"Decoded:  {decoded}")
-print(f"Match:    {original == decoded}")
+print(f"Match expected decoded form: {expected == decoded}")

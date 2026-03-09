@@ -2,6 +2,9 @@
 import socket, time, random, csv, sys, os
 from typing import Deque, Tuple
 from collections import deque
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from dht_krpc import DHTClient, BOOTSTRAP, parse_compact_nodes, parse_compact_peers
 
@@ -22,6 +25,7 @@ def resolve_bootstrap():
 
 def main():
     client = DHTClient(timeout=2.0)
+    file_handle = None
     print(f"# my node id: {client.node_id.hex()}", file=sys.stderr)
 
     try:
@@ -155,7 +159,8 @@ def main():
 
     finally:
         try:
-            file_handle.close()
+            if file_handle is not None:
+                file_handle.close()
         except Exception:
             pass
         client.close()
