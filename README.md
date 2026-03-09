@@ -51,7 +51,7 @@ That script will:
 2. Discover torrent infohashes
 3. Find peers sharing those torrents
 4. Fetch metadata (torrent name, file list, size)
-5. Output results to stdout and `metadata.txt`
+5. Output results to stdout and, unless `--stdout-only` is used, also save a CSV copy to `metadata.txt`
 
 Press `Ctrl+C` to stop.
 
@@ -140,8 +140,6 @@ Focus on:
 
 Relevant files:
 - `dht_collect_and_metadata.py`
-- `legacy/dht_crawler_min.py`
-- `legacy/dht_fetch_metadata_batch.py`
 
 ---
 
@@ -218,6 +216,7 @@ dht_krpc.py             # Layer 2-3: KRPC + DHT client
 bt_metadata.py          # Layer 4: Peer wire protocol
 dht_collect_and_metadata.py  # Main crawler
 test_offline_regressions.py  # Offline regression tests
+LICENSE                 # Open-source license
 
 docs/
   PROTOCOLS.md          # Protocol documentation
@@ -230,10 +229,6 @@ examples/
   03_dht_get_peers_demo.py  # Example: get_peers and sample_infohashes
   04_peer_metadata_demo.py  # Example: peer wire / metadata overview
   test_fetch_one.py     # Example: fetch metadata from a peer
-
-legacy/
-  dht_crawler_min.py    # Legacy: just crawl DHT
-  dht_fetch_metadata_batch.py  # Legacy: batch metadata fetch
 ```
 
 ---
@@ -262,6 +257,12 @@ Edit constants in `dht_collect_and_metadata.py`:
 MAX_INFOHASHES = 999999   # How many to discover
 PEERS_PER_INFOHASH = 20   # Max peers per infohash
 METADATA_PEER_ATTEMPTS = 5 # How many peers to try
+```
+
+Or use command-line flags:
+
+```bash
+python3 dht_collect_and_metadata.py --max-infohashes 25 --stdout-only
 ```
 
 ---

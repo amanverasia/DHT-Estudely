@@ -36,6 +36,7 @@ dht_krpc.py                 # Layer 2-3: KRPC + DHT client
 bt_metadata.py              # Layer 4: peer wire + BEP-9
 dht_collect_and_metadata.py # Main: ties all layers together
 test_offline_regressions.py # Offline regression tests for parser/client behavior
+LICENSE                     # Open-source license
 
 docs/
   PROTOCOLS.md              # Detailed protocol documentation
@@ -44,10 +45,6 @@ docs/
 
 examples/
   test_fetch_one.py         # Example: full metadata fetch flow
-
-legacy/                     # Older two-step scripts
-  dht_crawler_min.py
-  dht_fetch_metadata_batch.py
 ```
 
 ## Running
@@ -66,7 +63,7 @@ python3 examples/test_fetch_one.py
 python3 -m unittest test_offline_regressions.py
 ```
 
-All scripts under `examples/` and `legacy/` are intended to be runnable from the repo root.
+All scripts under `examples/` are intended to be runnable from the repo root.
 
 ## Agent Mission
 
