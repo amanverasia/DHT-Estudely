@@ -33,6 +33,7 @@ dht_bencode.py              # Layer 1: bencode/bdecode
 dht_krpc.py                 # Layer 2-3: KRPC + DHT client
 bt_metadata.py              # Layer 4: peer wire + BEP-9
 dht_collect_and_metadata.py # Main: ties all layers together
+test_offline_regressions.py # Offline regression tests for parser/client behavior
 
 docs/
   PROTOCOLS.md              # Detailed protocol documentation
@@ -56,7 +57,18 @@ python3 dht_krpc.py
 
 # Test metadata fetch
 python3 examples/test_fetch_one.py
+
+# Offline regression tests
+python3 -m unittest test_offline_regressions.py
 ```
+
+All scripts under `examples/` and `legacy/` are intended to be runnable from the repo root.
+
+## Data Shape Notes
+
+- `dht_bencode.bdecode()` returns bencoded string values as `bytes`, not Python `str`
+- `bt_metadata.fetch_metadata()` returns the raw BEP-9 metadata payload, which is typically the torrent `info` dict rather than a fully wrapped `.torrent` metainfo dict
+- `bt_metadata.parse_metainfo()` accepts both shapes
 
 ## Key Concepts
 
