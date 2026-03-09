@@ -38,6 +38,8 @@ Recommended progression:
 4. `examples/test_fetch_one.py` - connect to a peer and fetch torrent metadata
 5. `dht_collect_and_metadata.py` - run the full end-to-end pipeline after you understand the smaller pieces
 
+If you want a literal lab manual with prompts and expected observations, start with `docs/WORKSHOP.md`.
+
 If you want to jump straight to the full crawler:
 
 ```bash
@@ -220,6 +222,7 @@ test_offline_regressions.py  # Offline regression tests
 docs/
   PROTOCOLS.md          # Protocol documentation
   LEARNING.md           # Learning guide
+  WORKSHOP.md           # Guided hands-on lab
 
 examples/
   01_bencode_demo.py    # Example: bencode basics

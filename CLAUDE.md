@@ -39,6 +39,8 @@ test_offline_regressions.py # Offline regression tests for parser/client behavio
 
 docs/
   PROTOCOLS.md              # Detailed protocol documentation
+  LEARNING.md               # Broad learning guide
+  WORKSHOP.md               # Step-by-step guided lab for users
 
 examples/
   test_fetch_one.py         # Example: full metadata fetch flow
@@ -177,6 +179,7 @@ Always explain:
 - If the user asks to run something, prefer the smallest script that demonstrates the concept
 - If a live network demo fails, explain that public DHT/peer availability is inherently unstable and continue with an offline explanation
 - Mention `docs/PROTOCOLS.md` for theory and the Python modules for implementation
+- Prefer `docs/WORKSHOP.md` when the user wants a guided hands-on experience
 - Mention `test_offline_regressions.py` when discussing correctness or recent fixes
 
 ## Suggested First Response Pattern
